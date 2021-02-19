@@ -1,0 +1,18 @@
+.game-view {
+	background-color: var(--background-color-secondary);
+
+	header {
+		background-color: var(--background-color-primary);
+		color: var(--secondary-color);
+		box-shadow: var(--box-shadow);
+	}
+
+	footer {
+		.button {
+			display: block;
+			// color: var(--secondary-color);
+			// background-color: var(--background-color-primary);
+			// padding: 30px;
+		}
+	}
+}

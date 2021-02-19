@@ -1,0 +1,16 @@
+.button {
+	height: fit-content;
+
+	&--loading {
+		.MuiButton-label {
+			.MuiButton-startIcon {
+				margin: 0;
+				.MuiCircularProgress-root {
+					color: lightgray;
+					width: 30px !important;
+					height: 30px !important;
+				}
+			}
+		}
+	}
+}
