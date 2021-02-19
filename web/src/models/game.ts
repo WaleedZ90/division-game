@@ -4,7 +4,7 @@ import { User } from './user';
 export interface Game {
 	id: string;
 	playerOne: User;
-	playerTwo?: User;
+	playerTwo: User;
 	value: number;
 	startingNumber: number;
 	turn: string;

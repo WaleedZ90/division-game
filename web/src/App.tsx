@@ -1,3 +1,4 @@
+import { Button } from './components';
 import { SocketEvents } from 'enums';
 import { Game, User } from 'models';
 import { GameView, UserForm } from 'partials';
@@ -7,7 +8,7 @@ import './App.scss';
 
 // TODO: Wrap the Url in environment variable
 // TODO: create a hook for it to be re-usable
-const socket = io.connect('http://localhost:4000');
+const socket = io.connect('http://192.168.0.5:4000');
 
 const App: React.FC = () => {
 	const [currentUser, setCurrentUser] = useState<User>();
@@ -21,6 +22,8 @@ const App: React.FC = () => {
 
 		return () => {
 			socket.off(SocketEvents.Game);
+			socket.emit(SocketEvents.Left);
+			socket.emit(SocketEvents.Disconnet);
 		};
 	}, []);
 
@@ -35,6 +38,23 @@ const App: React.FC = () => {
 		);
 	}
 
+	if (currentGame && currentGame.winner) {
+		const gameWinner = currentGame.winner === currentGame.playerOne.id ? currentGame.playerOne : currentGame.playerTwo;
+
+		return (
+			<div>
+				<h1>{gameWinner.username} Wins!</h1>
+				<Button
+					onClick={() => {
+						socket.emit(SocketEvents.NewGame, { user: currentUser, isSingleUser: currentUser.isSingleUser });
+					}}
+				>
+					New game
+				</Button>
+			</div>
+		);
+	}
+
 	if (currentGame && currentUser) {
 		return <GameView game={currentGame} currentUser={currentUser} />;
 	}
@@ -42,6 +62,8 @@ const App: React.FC = () => {
 	return (
 		<div className="App">
 			<h1>Something went wrong please refresh the page</h1>
+			<code>Game: {JSON.stringify(currentGame)}</code>
+			<code>User: {JSON.stringify(currentUser)}</code>
 		</div>
 	);
 };
