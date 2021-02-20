@@ -3,12 +3,8 @@ import { SocketEvents } from 'enums';
 import { Game, User } from 'models';
 import { GameView, UserForm } from 'partials';
 import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
 import './App.scss';
-
-// TODO: Wrap the Url in environment variable
-// TODO: create a hook for it to be re-usable
-const socket = io.connect('http://192.168.0.5:4000');
+import socket from 'socket';
 
 const App: React.FC = () => {
 	const [currentUser, setCurrentUser] = useState<User>();
@@ -22,7 +18,6 @@ const App: React.FC = () => {
 
 		return () => {
 			socket.off(SocketEvents.Game);
-			socket.emit(SocketEvents.Left);
 			socket.emit(SocketEvents.Disconnet);
 		};
 	}, []);
@@ -53,6 +48,10 @@ const App: React.FC = () => {
 				</Button>
 			</div>
 		);
+	}
+
+	if (currentGame && !currentUser.isSingleUser && !currentGame.playerTwo) {
+		return <h1>Waiting for another player to join!</h1>;
 	}
 
 	if (currentGame && currentUser) {
