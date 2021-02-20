@@ -1,5 +1,6 @@
 import { GlobalActionTypes } from 'store/consts';
 import { GlobalContextReducer, GlobalState } from 'store/store-types';
+import { initialGlobalState } from './store.context';
 
 const globalContextReducer: GlobalContextReducer = (state, action) => {
 	let newState: GlobalState;
@@ -12,6 +13,10 @@ const globalContextReducer: GlobalContextReducer = (state, action) => {
 		case GlobalActionTypes.SET_CURRENT_USER:
 			const { user } = action.payload;
 			newState = { ...state, currentUser: user };
+			break;
+
+		case GlobalActionTypes.RESET_STATE:
+			newState = initialGlobalState;
 			break;
 
 		default:

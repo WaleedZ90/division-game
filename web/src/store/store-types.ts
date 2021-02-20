@@ -8,6 +8,7 @@ export interface BaseActionType {
 
 export type SetCurrentGame = (game: Game) => void;
 export type SetCurrentUser = (user: User) => void;
+export type ResetState = () => void;
 
 export interface GlobalState {
 	currentGame: Game | null;
@@ -17,6 +18,7 @@ export interface GlobalState {
 export interface GlobalValues extends GlobalState {
 	setCurrentGame: SetCurrentGame;
 	setCurrentUser: SetCurrentUser;
+	resetState: ResetState;
 }
 
 // ----- Actions -------
@@ -30,7 +32,11 @@ export interface SetCurrentUserAction extends BaseActionType {
 	payload: { user: User };
 }
 
+export interface ResetStateAction extends BaseActionType {
+	type: GlobalActionTypes.RESET_STATE;
+}
+
 // ---- End of Actions -----
 
-export type GlobalAction = SetCurrentGameAction | SetCurrentUserAction;
+export type GlobalAction = SetCurrentGameAction | SetCurrentUserAction | ResetStateAction;
 export type GlobalContextReducer = (state: GlobalState, action: GlobalAction) => GlobalState;

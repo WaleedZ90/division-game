@@ -10,6 +10,7 @@ const initialGlobalValues: GlobalValues = {
 	...initialGlobalState,
 	setCurrentGame: () => {},
 	setCurrentUser: () => {},
+	resetState: () => {},
 };
 
 const GlobalContext = React.createContext(initialGlobalValues);

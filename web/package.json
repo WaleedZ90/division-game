@@ -50,6 +50,10 @@
   },
   "devDependencies": {
     "@types/classnames": "^2.2.11",
-    "@types/socket.io-client": "^1.4.35"
+    "@types/enzyme": "^3.10.8",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
+    "@types/socket.io-client": "^1.4.35",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6"
   }
 }

@@ -14,3 +14,9 @@
 		}
 	}
 }
+
+.MuiButton-containedPrimary {
+	.MuiButton-label {
+		color: var(--secondary-color);
+	}
+}

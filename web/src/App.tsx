@@ -4,9 +4,10 @@ import React, { useContext, useEffect } from 'react';
 import './App.scss';
 import socket from 'socket';
 import GlobalContext from 'store/context/store.context';
+import { Button } from 'components';
 
 const App: React.FC = () => {
-	const { currentGame, currentUser, setCurrentUser } = useContext(GlobalContext);
+	const { currentGame, currentUser, setCurrentUser, resetState } = useContext(GlobalContext);
 
 	useEffect(() => {
 		return () => {
@@ -17,17 +18,32 @@ const App: React.FC = () => {
 
 	if (!currentUser) {
 		return (
-			<UserForm
-				onSubmit={(user) => {
-					setCurrentUser(user);
-					socket.emit(SocketEvents.NewGame, { user: user, isSingleUser: user.isSingleUser });
-				}}
-			/>
+			<div className="App">
+				<UserForm
+					onSubmit={(user) => {
+						setCurrentUser(user);
+						socket.emit(SocketEvents.NewGame, { user: user, isSingleUser: user.isSingleUser });
+					}}
+				/>
+			</div>
 		);
 	}
 
 	if (currentGame && !currentUser.isSingleUser && !currentGame.playerTwo) {
-		return <h1>Waiting for another player to join!</h1>;
+		return (
+			<div className="App">
+				<h1>Waiting for another player to join!</h1>
+				<Button
+					color="secondary"
+					onClick={() => {
+						socket.emit(SocketEvents.Left);
+						resetState();
+					}}
+				>
+					Leave queue
+				</Button>
+			</div>
+		);
 	}
 
 	if (currentGame && currentUser) {

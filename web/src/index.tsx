@@ -4,12 +4,16 @@ import './styles/index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import GlobalStateProvider from 'store/GlobalStateProvider';
+import { ThemeProvider } from '@material-ui/core';
+import theme from 'styles/theme';
 
 ReactDOM.render(
 	<React.StrictMode>
-		<GlobalStateProvider>
-			<App />
-		</GlobalStateProvider>
+		<ThemeProvider theme={theme}>
+			<GlobalStateProvider>
+				<App />
+			</GlobalStateProvider>
+		</ThemeProvider>
 	</React.StrictMode>,
 	document.getElementById('root')
 );

@@ -4,18 +4,14 @@ import { Attempt } from 'models';
 import React, { useContext, useEffect, useState } from 'react';
 
 import './styles.scss';
-import classNames from 'classnames';
 import socket from 'socket';
 import GlobalContext from 'store/context/store.context';
-
-import PersonSharpIcon from '@material-ui/icons/PersonSharp';
-import PersonOutlineSharpIcon from '@material-ui/icons/PersonOutlineSharp';
+import { PlayerAttempt } from 'partials/PlayerAttempt';
 
 export const GameView: React.FC = () => {
-	const { currentGame, currentUser } = useContext(GlobalContext);
+	const { currentGame, currentUser, resetState } = useContext(GlobalContext);
 
 	const [isPlayerTurn, setIsPlayerTurn] = useState(false);
-	const [startValue] = useState(currentGame?.value);
 
 	useEffect(() => {
 		if (currentGame && currentGame?.attemps.length > 0) {
@@ -30,32 +26,28 @@ export const GameView: React.FC = () => {
 		socket.emit(SocketEvents.Turn, { gameId: currentGame?.id, user: currentUser, number } as Attempt);
 	};
 
-	const chatItem = (attempt: Attempt, index: number): JSX.Element => {
-		const isPlayerOne = attempt.user.id === currentGame?.playerOne.id;
-
-		return (
-			<article key={index} className={classNames('chat-item', isPlayerOne && 'player-one', !isPlayerOne && 'player-two')}>
-				<div className="chat-item-header">
-					<figure>
-						{isPlayerOne && <PersonSharpIcon />}
-						{!isPlayerOne && <PersonOutlineSharpIcon />}
-						<figcaption>{isPlayerOne ? currentGame?.playerOne.username : currentGame?.playerTwo.username}</figcaption>
-					</figure>
-					<p className="player-input">{attempt.number}</p>
-				</div>
-				<div className="chat-item-calculations">
-					<p>{attempt.text}</p>
-					<p>{attempt.newValue}</p>
-				</div>
-			</article>
-		);
-	};
-
 	const renderChatView = () => {
+		if (currentGame?.attemps.length === 0 && isPlayerTurn) {
+			return (
+				<section className="game-view-chat">
+					<h1>You turn! {currentGame.value}</h1>
+				</section>
+			);
+		}
+
+		if (currentGame?.attemps.length === 0 && !isPlayerTurn) {
+			return (
+				<section className="game-view-chat">
+					<h1>Wait for other player's turn!</h1>
+				</section>
+			);
+		}
+
 		return (
 			<section className="game-view-chat">
-				<h1>{startValue}</h1>
-				{currentGame?.attemps.map(chatItem)}
+				{currentGame?.attemps.map((attempt: Attempt, index) => (
+					<PlayerAttempt key={index} attempt={attempt} />
+				))}
 			</section>
 		);
 	};
@@ -63,19 +55,30 @@ export const GameView: React.FC = () => {
 	if (currentGame && currentGame.winner) {
 		const gameWinner = currentGame.winner === currentGame.playerOne.id ? currentGame.playerOne : currentGame.playerTwo;
 		return (
-			<div>
-				<h1>{gameWinner.username} Wins!</h1>
-				<Button
-					onClick={() => {
-						socket.emit(SocketEvents.NewGame, {
-							user: currentUser,
-							isSingleUser: currentUser && currentUser?.isSingleUser,
-						});
-					}}
-				>
-					New game
-				</Button>
-			</div>
+			<section className="game-winner">
+				<h1>{gameWinner?.username} Wins!</h1>
+				<div className="game-winner-actions">
+					<Button
+						onClick={() => {
+							socket.emit(SocketEvents.NewGame, {
+								user: currentUser,
+								isSingleUser: currentUser && currentUser?.isSingleUser,
+							});
+						}}
+					>
+						New game
+					</Button>
+					<Button
+						color="secondary"
+						onClick={() => {
+							socket.emit(SocketEvents.Left);
+							resetState();
+						}}
+					>
+						Leave game
+					</Button>
+				</div>
+			</section>
 		);
 	}
 
@@ -83,7 +86,7 @@ export const GameView: React.FC = () => {
 		<article className="game-view">
 			<header>
 				<div>
-					<h1>Hello {currentUser?.username}, Greetings from Scoober team!</h1>
+					<h1>Hello {currentUser?.username}!</h1>
 					<p>Win the game or win the job</p>
 				</div>
 				<div>

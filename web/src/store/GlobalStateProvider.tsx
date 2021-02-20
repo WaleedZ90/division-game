@@ -6,7 +6,7 @@ import socket from 'socket';
 import { GlobalActionTypes } from './consts';
 import GlobalContext, { initialGlobalState } from './context/store.context';
 import globalContextReducer from './context/store.reducer';
-import { SetCurrentUser, SetCurrentGame } from './store-types';
+import { SetCurrentUser, SetCurrentGame, ResetState } from './store-types';
 
 const GlobalStateProvider: React.FC = ({ children }) => {
 	const [state, dispatch] = useReducer(globalContextReducer, initialGlobalState);
@@ -32,11 +32,18 @@ const GlobalStateProvider: React.FC = ({ children }) => {
 		});
 	};
 
+	const resetState: ResetState = () => {
+		dispatch({
+			type: GlobalActionTypes.RESET_STATE,
+		});
+	};
+
 	const memoizedGlobalContextValue = useMemo(
 		() => ({
 			...state,
 			setCurrentGame,
 			setCurrentUser,
+			resetState,
 		}),
 		[state]
 	);

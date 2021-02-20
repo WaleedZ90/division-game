@@ -1,5 +1,6 @@
 .game-view {
 	background-color: var(--background-color-secondary);
+	padding-bottom: 30px;
 
 	header {
 		background-color: var(--background-color-primary);
@@ -16,64 +17,13 @@
 		}
 	}
 
-	.chat-item {
-		padding: 15px;
-
-		&-header {
-			display: flex;
-
-			figure {
-				width: 65px;
-				margin: 0;
-
-				svg {
-					width: 100%;
-					height: 100%;
-				}
-
-				figcaption {
-					margin-top: -25px;
-					text-align: center;
-					font-weight: 700;
-				}
-			}
-
-			.player-input {
-				margin-left: 15px;
-				font-size: 25px;
-				padding: 10px;
-				background-color: var(--background-color-primary);
-				color: var(--background-color-secondary);
-				border-radius: 50%;
-				width: 35px;
-				height: 35px;
-				text-align: center;
-				font-weight: 700;
-			}
-		}
-
-		&-calculations {
-			margin-left: 85px;
-			margin-right: 65px;
-
-			p {
-				box-shadow: var(--box-shadow);
-				background-color: white;
-				border-radius: 5px;
-				padding: 15px;
-				margin: 0;
-				font-weight: 600;
-			}
-
-			p + p {
-				margin-top: 10px;
-			}
-		}
-	}
-
-	.player-two {
-		.chat-item-header {
-			flex-direction: row-reverse;
+	&-chat {
+		h1 {
+			text-align: center;
+			margin: 0;
+			font-size: 50px;
+			margin-top: 10px;
+			margin-bottom: 30px;
 		}
 	}
 
@@ -82,7 +32,29 @@
 		justify-content: space-evenly;
 
 		.button {
-			display: block;
+			display: flex;
+			border-radius: 50%;
+			height: 60px;
+			width: 60px;
+			justify-content: center;
+			align-items: center;
+
+			.MuiButton-label {
+				font-size: 30px;
+				font-weight: 600;
+			}
+		}
+	}
+}
+
+.game-winner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	&-actions {
+		.button + .button {
+			margin-left: 10px;
 		}
 	}
 }
