@@ -1,0 +1,4 @@
+export enum GlobalActionTypes {
+	SET_CURRENT_GAME = 'SET_CURRENT_GAME',
+	SET_CURRENT_USER = 'SET_CURRENT_USER',
+}

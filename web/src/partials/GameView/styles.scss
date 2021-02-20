@@ -5,14 +5,84 @@
 		background-color: var(--background-color-primary);
 		color: var(--secondary-color);
 		box-shadow: var(--box-shadow);
+		padding: 21px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		h1,
+		p {
+			margin: 0;
+		}
+	}
+
+	.chat-item {
+		padding: 15px;
+
+		&-header {
+			display: flex;
+
+			figure {
+				width: 65px;
+				margin: 0;
+
+				svg {
+					width: 100%;
+					height: 100%;
+				}
+
+				figcaption {
+					margin-top: -25px;
+					text-align: center;
+					font-weight: 700;
+				}
+			}
+
+			.player-input {
+				margin-left: 15px;
+				font-size: 25px;
+				padding: 10px;
+				background-color: var(--background-color-primary);
+				color: var(--background-color-secondary);
+				border-radius: 50%;
+				width: 35px;
+				height: 35px;
+				text-align: center;
+				font-weight: 700;
+			}
+		}
+
+		&-calculations {
+			margin-left: 85px;
+			margin-right: 65px;
+
+			p {
+				box-shadow: var(--box-shadow);
+				background-color: white;
+				border-radius: 5px;
+				padding: 15px;
+				margin: 0;
+				font-weight: 600;
+			}
+
+			p + p {
+				margin-top: 10px;
+			}
+		}
+	}
+
+	.player-two {
+		.chat-item-header {
+			flex-direction: row-reverse;
+		}
 	}
 
 	footer {
+		display: flex;
+		justify-content: space-evenly;
+
 		.button {
 			display: block;
-			// color: var(--secondary-color);
-			// background-color: var(--background-color-primary);
-			// padding: 30px;
 		}
 	}
 }
