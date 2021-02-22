@@ -1,32 +1,19 @@
 import { Button } from 'components';
-import { SocketEvents } from 'enums';
 import { Overlay } from 'partials';
-import React, { useContext } from 'react';
-import socket from 'socket';
+import React from 'react';
 import './styles.scss';
 
 import Balloons from '../../assets/images/balloons.png';
 import Cup from 'assets/images/cup.png';
 
-import GlobalContext from 'store/context/store.context';
+import { useSocket } from 'hooks';
 
 type Props = {
 	isLoser?: boolean;
 };
 
 export const GameWinner: React.FC<Props> = ({ isLoser = false }) => {
-	const { resetState, currentUser } = useContext(GlobalContext);
-
-	const startNewGame = () => {
-		socket.emit(SocketEvents.NewGame, {
-			user: currentUser,
-			isSingleUser: currentUser?.isSingleUser,
-		});
-	};
-	const leaveGame = () => {
-		socket.emit(SocketEvents.Left);
-		resetState();
-	};
+	const { startNewGame, leaveGame } = useSocket();
 
 	return (
 		<section className="game-winner">

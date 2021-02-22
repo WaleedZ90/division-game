@@ -1,5 +1,5 @@
 import { SocketEvents } from 'enums';
-import { GameView, UserForm } from 'partials';
+import { ErrorView, GameView, UserForm } from 'partials';
 import React, { useContext, useEffect } from 'react';
 import './App.scss';
 import socket from 'socket';
@@ -7,9 +7,11 @@ import GlobalContext from 'store/context/store.context';
 import { Button } from 'components';
 import Filter3Icon from '@material-ui/icons/Filter3';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { useSocket } from 'hooks';
 
 const App: React.FC = () => {
-	const { currentGame, currentUser, setCurrentUser, resetState } = useContext(GlobalContext);
+	const { currentGame, currentUser, setCurrentUser } = useContext(GlobalContext);
+	const { startNewGame, leaveGame } = useSocket();
 
 	useEffect(() => {
 		return () => {
@@ -17,6 +19,11 @@ const App: React.FC = () => {
 			socket.emit(SocketEvents.Disconnet);
 		};
 	}, []);
+
+	useEffect(() => {
+		if (currentUser) startNewGame();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentUser]);
 
 	if (!currentUser) {
 		return (
@@ -26,12 +33,7 @@ const App: React.FC = () => {
 						<Filter3Icon />
 						<figcaption>The Division Game</figcaption>
 					</figure>
-					<UserForm
-						onSubmit={(user) => {
-							setCurrentUser(user);
-							socket.emit(SocketEvents.NewGame, { user: user, isSingleUser: user.isSingleUser });
-						}}
-					/>
+					<UserForm onSubmit={setCurrentUser} />
 				</div>
 			</div>
 		);
@@ -43,13 +45,7 @@ const App: React.FC = () => {
 				<div className="waiting-screen">
 					<h1>Waiting for another player to join!</h1>
 					<CircularProgress className="spinner" />
-					<Button
-						color="secondary"
-						onClick={() => {
-							socket.emit(SocketEvents.Left);
-							resetState();
-						}}
-					>
+					<Button color="secondary" onClick={leaveGame}>
 						Leave queue
 					</Button>
 				</div>
@@ -67,9 +63,7 @@ const App: React.FC = () => {
 
 	return (
 		<div className="App">
-			<h1>Something went wrong please refresh the page</h1>
-			<code>Game: {JSON.stringify(currentGame)}</code>
-			<code>User: {JSON.stringify(currentUser)}</code>
+			<ErrorView />
 		</div>
 	);
 };

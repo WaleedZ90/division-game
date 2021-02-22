@@ -1,17 +1,17 @@
 import { Button } from 'components';
-import { SocketEvents } from 'enums';
 import { Attempt } from 'models';
 import React, { useContext, useEffect, useState } from 'react';
 
 import './styles.scss';
-import socket from 'socket';
 import GlobalContext from 'store/context/store.context';
 import { PlayerAttempt } from 'partials/PlayerAttempt';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { GameWinner } from 'partials/GameWinner';
+import { useSocket } from 'hooks';
 
 export const GameView: React.FC = () => {
-	const { currentGame, currentUser, resetState } = useContext(GlobalContext);
+	const { currentGame, currentUser } = useContext(GlobalContext);
+	const { leaveGame, performAttempt } = useSocket();
 	const [isPlayerTurn, setIsPlayerTurn] = useState(false);
 
 	useEffect(() => {
@@ -24,7 +24,7 @@ export const GameView: React.FC = () => {
 	}, [currentGame, currentUser]);
 
 	const performGameMove = (number: number) => {
-		socket.emit(SocketEvents.Turn, { gameId: currentGame?.id, user: currentUser, number } as Attempt);
+		performAttempt(number);
 	};
 
 	const renderChatView = () => {
@@ -55,7 +55,7 @@ export const GameView: React.FC = () => {
 
 	const renderGameWinner = () => {
 		const gameWinner = currentGame?.winner === currentGame?.playerOne.id ? currentGame?.playerOne : currentGame?.playerTwo;
-		return <GameWinner isLoser={gameWinner?.id === currentUser?.id} />;
+		return <GameWinner isLoser={gameWinner?.id !== currentUser?.id} />;
 	};
 
 	return (
@@ -66,14 +66,7 @@ export const GameView: React.FC = () => {
 					<p>Win the game or win the job</p>
 				</div>
 				<div>
-					<Button
-						className={'game-view-leave-game-button'}
-						color="secondary"
-						onClick={() => {
-							socket.emit(SocketEvents.Left);
-							resetState();
-						}}
-					>
+					<Button className={'game-view-leave-game-button'} color="secondary" onClick={leaveGame}>
 						<ExitToAppIcon />
 					</Button>
 				</div>

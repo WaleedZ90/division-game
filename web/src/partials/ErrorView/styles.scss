@@ -1,0 +1,17 @@
+.error-view {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	height: 100%;
+
+	svg {
+		font-size: 15rem;
+		color: var(--danger-color);
+	}
+
+	h1 {
+		font-size: 1.8rem;
+		margin: 0;
+	}
+}
