@@ -38,7 +38,7 @@ export const UserForm: React.FC<Props> = ({ onSubmit }) => {
 	return (
 		<Formik<FormValues> initialValues={INITIAL_VALUES} validationSchema={VALIDATION_SCHEMA} onSubmit={handleSubmit}>
 			{({ values, errors, handleChange }) => (
-				<Form className="user-form">
+				<Form className={`user-form`}>
 					<Textbox
 						label={'Username'}
 						name="username"

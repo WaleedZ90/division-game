@@ -9,14 +9,20 @@ import PersonOutlineSharpIcon from '@material-ui/icons/PersonOutlineSharp';
 
 type Props = {
 	attempt: Attempt;
+	isLastElement?: boolean;
 };
 
-export const PlayerAttempt: React.FC<Props> = ({ attempt }) => {
+export const PlayerAttempt: React.FC<Props> = ({ attempt, isLastElement = false }) => {
 	const { currentGame } = useContext(GlobalContext);
 	const isPlayerOne = attempt.user.id === currentGame?.playerOne.id;
 
 	return (
-		<article className={classNames('player-attempt', isPlayerOne && 'player-one', !isPlayerOne && 'player-two')}>
+		<article
+			ref={(el) => {
+				if (el && isLastElement) el.scrollIntoView();
+			}}
+			className={classNames('player-attempt', isPlayerOne && 'player-one', !isPlayerOne && 'player-two')}
+		>
 			<div className="player-attempt-header">
 				<figure>
 					{isPlayerOne && <PersonSharpIcon />}

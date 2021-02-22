@@ -1,4 +1,46 @@
 .App {
-	max-width: 500px;
+	max-width: 450px;
 	margin: auto;
+	height: 100vh;
+	background-color: var(--background-color-secondary);
+
+	.welcome-screen {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding: 0 40px;
+
+		&-logo {
+			margin: auto;
+			margin-top: 40px;
+
+			svg {
+				height: 100%;
+				width: 100%;
+				color: var(--background-color-primary);
+			}
+
+			figcaption {
+				text-align: center;
+				font-size: xx-large;
+				font-weight: 700;
+				margin-top: 10px;
+				margin-bottom: 20px;
+			}
+		}
+	}
+
+	.waiting-screen {
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		width: 100%;
+
+		.spinner {
+			margin-bottom: 15px;
+		}
+	}
 }

@@ -7,6 +7,10 @@ import './styles.scss';
 import socket from 'socket';
 import GlobalContext from 'store/context/store.context';
 import { PlayerAttempt } from 'partials/PlayerAttempt';
+import { Overlay } from 'partials';
+
+import Balloons from '../../assets/images/balloons.png';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 export const GameView: React.FC = () => {
 	const { currentGame, currentUser, resetState } = useContext(GlobalContext);
@@ -46,41 +50,47 @@ export const GameView: React.FC = () => {
 		return (
 			<section className="game-view-chat">
 				{currentGame?.attemps.map((attempt: Attempt, index) => (
-					<PlayerAttempt key={index} attempt={attempt} />
+					<PlayerAttempt key={index} attempt={attempt} isLastElement={currentGame.attemps[index + 1] == null} />
 				))}
 			</section>
 		);
 	};
 
-	if (currentGame && currentGame.winner) {
-		const gameWinner = currentGame.winner === currentGame.playerOne.id ? currentGame.playerOne : currentGame.playerTwo;
+	const renderGameWinnerOverlay = () => {
+		const gameWinner = currentGame?.winner === currentGame?.playerOne.id ? currentGame?.playerOne : currentGame?.playerTwo;
 		return (
 			<section className="game-winner">
-				<h1>{gameWinner?.username} Wins!</h1>
-				<div className="game-winner-actions">
-					<Button
-						onClick={() => {
-							socket.emit(SocketEvents.NewGame, {
-								user: currentUser,
-								isSingleUser: currentUser && currentUser?.isSingleUser,
-							});
-						}}
-					>
-						New game
-					</Button>
-					<Button
-						color="secondary"
-						onClick={() => {
-							socket.emit(SocketEvents.Left);
-							resetState();
-						}}
-					>
-						Leave game
-					</Button>
+				<Overlay />
+				<div className="game-winner-dialogue">
+					<figure>
+						<img src={Balloons} alt="Balloonsns" />
+					</figure>
+					<h1>{gameWinner?.username} Wins!</h1>
+					<div className="game-winner-actions">
+						<Button
+							onClick={() => {
+								socket.emit(SocketEvents.NewGame, {
+									user: currentUser,
+									isSingleUser: currentUser && currentUser?.isSingleUser,
+								});
+							}}
+						>
+							New game
+						</Button>
+						<Button
+							color="secondary"
+							onClick={() => {
+								socket.emit(SocketEvents.Left);
+								resetState();
+							}}
+						>
+							Leave game
+						</Button>
+					</div>
 				</div>
 			</section>
 		);
-	}
+	};
 
 	return (
 		<article className="game-view">
@@ -90,19 +100,26 @@ export const GameView: React.FC = () => {
 					<p>Win the game or win the job</p>
 				</div>
 				<div>
-					<Button color="secondary" onClick={() => socket.emit(SocketEvents.Left)}>
-						Leave game
+					<Button
+						className={'game-view-leave-game-button'}
+						color="secondary"
+						onClick={() => socket.emit(SocketEvents.Left)}
+					>
+						<ExitToAppIcon />
 					</Button>
 				</div>
 			</header>
 			{renderChatView()}
-			{isPlayerTurn && (
-				<footer>
-					<Button onClick={() => performGameMove(-1)}>-1</Button>
-					<Button onClick={() => performGameMove(0)}>0</Button>
-					<Button onClick={() => performGameMove(1)}>1</Button>
-				</footer>
-			)}
+			<footer>
+				{isPlayerTurn && (
+					<React.Fragment>
+						<Button onClick={() => performGameMove(-1)}>-1</Button>
+						<Button onClick={() => performGameMove(0)}>0</Button>
+						<Button onClick={() => performGameMove(1)}>1</Button>
+					</React.Fragment>
+				)}
+			</footer>
+			{currentGame && currentGame.winner && renderGameWinnerOverlay()}
 		</article>
 	);
 };
