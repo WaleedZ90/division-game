@@ -9,6 +9,7 @@ import './styles.scss';
 type FormValues = {
 	username: string;
 	isSingleUser: boolean;
+	isBotGame: boolean;
 };
 
 type Props = {
@@ -18,11 +19,13 @@ type Props = {
 const INITIAL_VALUES: FormValues = {
 	username: '',
 	isSingleUser: false,
+	isBotGame: false,
 };
 
 const VALIDATION_SCHEMA = object().shape({
 	username: string().required('This field is required'),
 	isSingleUser: boolean(),
+	isBotGame: boolean(),
 });
 
 export const UserForm: React.FC<Props> = ({ onSubmit }) => {
@@ -31,6 +34,7 @@ export const UserForm: React.FC<Props> = ({ onSubmit }) => {
 			id: uuidv4(),
 			username: values.username,
 			isSingleUser: values.isSingleUser,
+			isBotGame: values.isBotGame,
 		};
 		onSubmit(newUser);
 	};
@@ -51,6 +55,13 @@ export const UserForm: React.FC<Props> = ({ onSubmit }) => {
 						name="isSingleUser"
 						value={values.isSingleUser}
 						errorMessage={errors.isSingleUser}
+						onChange={handleChange}
+					/>
+					<Checkbox
+						label="Bot game"
+						name="isBotGame"
+						value={values.isBotGame}
+						errorMessage={errors.isBotGame}
 						onChange={handleChange}
 					/>
 					<Button type="submit">Join game</Button>

@@ -11,6 +11,7 @@ export const useSocket = () => {
 		socket.emit(SocketEvents.NewGame, {
 			user: currentUser,
 			isSingleUser: currentUser?.isSingleUser,
+			isBotGame: currentUser?.isBotGame,
 		});
 	};
 
