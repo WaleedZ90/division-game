@@ -29,7 +29,7 @@ io.on('connection', (socket) => {
 			socket.join(game.id);
 			io.to(game.id).emit('game', game);
 
-			do {
+			const interval = setInterval(() => {
 				const currentPlayer = game.turn === game.playerOne.id ? game.playerOne : game.playerTwo;
 				const fakeAttempt = {
 					gameId: game.id,
@@ -38,13 +38,17 @@ io.on('connection', (socket) => {
 				};
 
 				gamesState = turn(gamesState, fakeAttempt);
-				io.to(game.id).emit('game', findGame(gamesState, fakeAttempt.gameId));
 				// Update game variable to determine next player turn
 				game = findGame(gamesState, game.id);
-			} while (game.winner === null);
+				// Send updates to the client
+				io.to(game.id).emit('game', game);
 
-			// Cleanup, remove the game from the fake db to not mess with other real human interactions
-			gamesState = gamesState.filter((g) => g.id !== game.id);
+				if (game.winner != null) {
+					clearInterval(interval);
+					// Cleanup, remove the game from the fake db to not mess with other real human interactions
+					gamesState = gamesState.filter((g) => g.id !== game.id);
+				}
+			}, 600);
 			return;
 		}
 
