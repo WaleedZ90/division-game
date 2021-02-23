@@ -6,7 +6,7 @@ const io = require('socket.io')(http, {
 		origin: '*',
 	},
 });
-const { PLAYER, createNewGame, joinGame, findGame, turn, leaveGame } = require('./utils');
+const { PLAYER, createNewGame, joinGame, findGame, turn, leaveGame, createBotGame } = require('./utils');
 
 //Fake DB
 let gamesState = [];
@@ -20,9 +20,33 @@ const onLeave = (state, id) => {
 };
 
 io.on('connection', (socket) => {
-	socket.on('newgame', ({ user, isSingleUser }) => {
-		console.log('newgame emitted!');
+	socket.on('newgame', ({ user, isSingleUser, isBotGame }) => {
 		socket.userId = user.id;
+
+		if (isBotGame) {
+			let game = createBotGame();
+			gamesState.push(game);
+			socket.join(game.id);
+			io.to(game.id).emit('game', game);
+
+			do {
+				const currentPlayer = game.turn === game.playerOne.id ? game.playerOne : game.playerTwo;
+				const fakeAttempt = {
+					gameId: game.id,
+					user: currentPlayer,
+					number: [-1, 0, 1][Math.floor(Math.random() * 3)],
+				};
+
+				gamesState = turn(gamesState, fakeAttempt);
+				io.to(game.id).emit('game', findGame(gamesState, fakeAttempt.gameId));
+				// Update game variable to determine next player turn
+				game = findGame(gamesState, game.id);
+			} while (game.winner === null);
+
+			// Cleanup, remove the game from the fake db to not mess with other real human interactions
+			gamesState = gamesState.filter((g) => g.id !== game.id);
+			return;
+		}
 
 		if (isSingleUser) {
 			const game = createNewGame({ user, isSingleUser });
