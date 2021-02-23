@@ -9,20 +9,20 @@
 
 ### To start a single player game:
 
-- Type a name in the welcome screen
+- Type your name in the welcome screen
 - Check "Playing alone" checkbox
-- A single player game should start
+- A single player game will be launched
 
 ### To start a two player game:
 
-- Just type a name and join
+- Type the name of the second and join
 - The backend server will join you with another player that's also requesting to play with another player
 - It can be easily tested by opening two browser instances
 
 ### To start a bot game:
 
-- Just check Bot game
-- A game between Two CPUs should start.
+- Check Bot game
+- A game between Two CPUs will be launched
 
 ### Changes made to the provided backend code:
 
