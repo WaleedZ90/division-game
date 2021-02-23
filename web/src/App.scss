@@ -1,7 +1,7 @@
 .App {
 	max-width: 450px;
 	margin: auto;
-	height: 100vh;
+	height: 100%;
 	background-color: var(--background-color-secondary);
 
 	.welcome-screen {
@@ -13,20 +13,21 @@
 		&-logo {
 			margin: auto;
 			margin-top: 40px;
+			width: 70%;
 
 			svg {
 				height: 100%;
 				width: 100%;
 				color: var(--background-color-primary);
 			}
+		}
 
-			figcaption {
-				text-align: center;
-				font-size: xx-large;
-				font-weight: 700;
-				margin-top: 10px;
-				margin-bottom: 20px;
-			}
+		p {
+			text-align: center;
+			font-size: 1.5rem;
+			font-weight: 700;
+			margin-top: 10px;
+			margin-bottom: 20px;
 		}
 	}
 

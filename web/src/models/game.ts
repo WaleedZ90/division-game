@@ -10,4 +10,5 @@ export interface Game {
 	turn: string;
 	attemps: Attempt[];
 	winner: string;
+	isBotGame: boolean;
 }

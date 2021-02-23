@@ -31,8 +31,8 @@ const App: React.FC = () => {
 				<div className="welcome-screen">
 					<figure className="welcome-screen-logo">
 						<Filter3Icon />
-						<figcaption>The Division Game</figcaption>
 					</figure>
+					<p>The Division Game</p>
 					<UserForm onSubmit={setCurrentUser} />
 				</div>
 			</div>

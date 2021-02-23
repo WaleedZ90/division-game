@@ -1,5 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 
+const COMPUTER = { id: '001', username: 'Computer' };
 const PLAYER = { id: '000', username: 'cpu' };
 
 const createNewGame = ({ user, isSingleUser }) => {
@@ -14,6 +15,22 @@ const createNewGame = ({ user, isSingleUser }) => {
 		turn: isSingleUser ? user.id : null,
 		attemps: [],
 		winner: null,
+		isBotGame: false,
+	};
+};
+
+const createBotGame = () => {
+	const randomNumber = Math.floor(Math.random() * 99) + 9;
+	return {
+		id: uuidv4(),
+		playerOne: COMPUTER,
+		playerTwo: PLAYER,
+		value: randomNumber,
+		startingNumber: randomNumber,
+		turn: COMPUTER.id,
+		attemps: [],
+		winner: null,
+		isBotGame: true,
 	};
 };
 
@@ -104,6 +121,7 @@ const turn = (state, attempt) => {
 module.exports = {
 	PLAYER,
 	createNewGame,
+	createBotGame,
 	turn,
 	leaveGame,
 	findGame,

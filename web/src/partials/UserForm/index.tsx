@@ -23,7 +23,10 @@ const INITIAL_VALUES: FormValues = {
 };
 
 const VALIDATION_SCHEMA = object().shape({
-	username: string().required('This field is required'),
+	username: string().when('isBotGame', {
+		is: false,
+		then: string().required('This field is required'),
+	}),
 	isSingleUser: boolean(),
 	isBotGame: boolean(),
 });
@@ -43,20 +46,24 @@ export const UserForm: React.FC<Props> = ({ onSubmit }) => {
 		<Formik<FormValues> initialValues={INITIAL_VALUES} validationSchema={VALIDATION_SCHEMA} onSubmit={handleSubmit}>
 			{({ values, errors, handleChange }) => (
 				<Form className={`user-form`}>
-					<Textbox
-						label={'Username'}
-						name="username"
-						value={values.username}
-						errorMessage={errors.username}
-						onChange={handleChange}
-					/>
-					<Checkbox
-						label="Playing alone"
-						name="isSingleUser"
-						value={values.isSingleUser}
-						errorMessage={errors.isSingleUser}
-						onChange={handleChange}
-					/>
+					{!values.isBotGame && (
+						<Textbox
+							label={'Username'}
+							name="username"
+							value={values.username}
+							errorMessage={errors.username}
+							onChange={handleChange}
+						/>
+					)}
+					{!values.isBotGame && (
+						<Checkbox
+							label="Playing alone"
+							name="isSingleUser"
+							value={values.isSingleUser}
+							errorMessage={errors.isSingleUser}
+							onChange={handleChange}
+						/>
+					)}
 					<Checkbox
 						label="Bot game"
 						name="isBotGame"

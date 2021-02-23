@@ -36,7 +36,7 @@ export const GameView: React.FC = () => {
 			);
 		}
 
-		if (currentGame?.attemps.length === 0 && !isPlayerTurn) {
+		if (!currentGame?.isBotGame && currentGame?.attemps.length === 0 && !isPlayerTurn) {
 			return (
 				<section className="game-view-chat">
 					<h1>Wait for other player's turn!</h1>
