@@ -3,8 +3,8 @@ const app = require('express')();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
 	cors: {
-		origin: '*',
-	},
+		origin: '*'
+	}
 });
 const { PLAYER, createNewGame, joinGame, findGame, turn, leaveGame, createBotGame } = require('./utils');
 
@@ -19,7 +19,7 @@ const onLeave = (state, id) => {
 	}
 };
 
-io.on('connection', (socket) => {
+io.on('connection', socket => {
 	socket.on('newgame', ({ user, isSingleUser, isBotGame }) => {
 		socket.userId = user.id;
 
@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
 				const fakeAttempt = {
 					gameId: game.id,
 					user: currentPlayer,
-					number: [-1, 0, 1][Math.floor(Math.random() * 3)],
+					number: [-1, 0, 1][Math.floor(Math.random() * 3)]
 				};
 
 				gamesState = turn(gamesState, fakeAttempt);
@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
 				if (game.winner != null) {
 					clearInterval(interval);
 					// Cleanup, remove the game from the fake db to not mess with other real human interactions
-					gamesState = gamesState.filter((g) => g.id !== game.id);
+					gamesState = gamesState.filter(g => g.id !== game.id);
 				}
 			}, 600);
 			return;
@@ -61,7 +61,7 @@ io.on('connection', (socket) => {
 
 			io.to(game.id).emit('game', game);
 		} else {
-			const startedGame = gamesState.find((game) => game.playerTwo === null && game.winner === null);
+			const startedGame = gamesState.find(game => game.playerTwo === null && game.winner === null);
 
 			if (!startedGame) {
 				const game = createNewGame({ user });
@@ -79,7 +79,7 @@ io.on('connection', (socket) => {
 		}
 	});
 
-	socket.on('turn', (attempt) => {
+	socket.on('turn', attempt => {
 		gamesState = turn(gamesState, attempt);
 
 		const game = findGame(gamesState, attempt.gameId);
@@ -91,7 +91,7 @@ io.on('connection', (socket) => {
 				const fakeAttempt = {
 					gameId: attempt.gameId,
 					user: PLAYER,
-					number: [-1, 0, 1][Math.floor(Math.random() * 3)],
+					number: [-1, 0, 1][Math.floor(Math.random() * 3)]
 				};
 
 				gamesState = turn(gamesState, fakeAttempt);

@@ -1,20 +1,31 @@
 {
-  "name": "server",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "nodemon server.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1",
-    "socket.io": "^3.0.3",
-    "uuid": "^8.3.1"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.6"
-  }
+	"name": "server",
+	"version": "0.0.1",
+	"description": "",
+	"main": "server.js",
+	"scripts": {
+		"start": "nodemon server.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.17.1",
+		"socket.io": "^3.0.3",
+		"uuid": "^8.3.1"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.6"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/WaleedZ90/division-game"
+	},
+	"keywords": [
+		"node",
+		"heroku",
+		"express"
+	],
+	"engines": {
+		"node": "12.x.x"
+	}
 }
